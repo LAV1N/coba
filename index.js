@@ -1,20 +1,52 @@
+//express
+const express = require('express')
+// import express
+const app = express()
+const chalk = require("chalk")
+
+app.get('/', (req, res) => {
+  res.send('Bot Loaded! Changes Saved!');
+});
+
+app.listen(3000, () => {
+  console.log(
+    chalk.white('['),
+    chalk.cyan('Express'),
+    chalk.white(']'),
+    chalk.gray(':'),
+    chalk.white('Connected')
+  );
+});
+
+
+
+
+
 const { Client, Collection } = require("discord.js");
 // Import Discord.Js.
+//moongose in handler /index
 const client = new Client({ intents: 32767 });
 // Make New Discord Client.
 module.exports = client;
 // Export Client To Give Other Files Access.
-const chalk = require("chalk");
-// Import Chalk
 
+const db = require("quick.db")
+//import quick.db
+const countingSchema = require("./schemas/counting") 
+let pagination = require('./function/pagination') 
+const eco = require('./schemas/economy');
 // ———————————————[Global Variables]———————————————
 client.commands = new Collection();
 client.aliases = new Collection();
 client.cooldowns = new Collection();
 client.slashCommands = new Collection();
+const Timeout = new Collection();
+client.snipes = new Collection()
 client.config = require("./botconfig/main.json");
 require("./handler")(client);
 // Initializing the project.
+
+
 
 // ———————————————[Logging Into Client]———————————————
 const token = process.env["clienttoken"] || client.config.clienttoken;
@@ -55,8 +87,8 @@ if(token === ""){
    );
    console.log(
       chalk.green.bold("Still Need Help? Contact Me:\n") +
-         chalk.yellow.italic("Discord: DrakeZee#5223\n") +
-         chalk.yellow.italic("Discord Server: dsc.gg/botsway")
+         chalk.yellow.italic("Discord: Boba\n") +
+         chalk.yellow.italic("Discord Server: dsc.gg/lunarteam")
    );
 } else {
    client.login(token);
@@ -100,16 +132,14 @@ process.on("multipleResolves", (type, promise, reason) => {
    console.log(type, promise, reason);
 });
 
-/*
- * ———————————————[Credits]———————————————
- * Made by : DrakeZee#5223
- * Support Server : dsc.gg/BotsWay
- * Youtube : youtube.com/DrakeZee
- * Please Help Me Reach 1k Subs DJs Codes And More Amazing * Stuff!
- * Also Add Me Friend When Using This, I Have No Friends :(
- * 
- * This Was Only Possible By Following People :
- *
- * recon#8448  | youtube.com/reconlxx | discord.gg/recon
- * Tomato#6966 | milrato.dev          | discord.gg/milrato
- */
+const Levels = require("discord-xp");
+
+const { mongooseConnectionString } = require("./botconfig/main.json");
+
+Levels.setURL(mongooseConnectionString); //ok
+
+//express
+ 
+
+
+

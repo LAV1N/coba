@@ -4,7 +4,8 @@ const { Client } = require("discord.js");
 const globPromise = promisify(glob);
 const mainjson = require("../botconfig/main.json");
 const chalk = require("chalk");
-
+const { mongooseConnectionString } = require("../botconfig/main.json");
+const mongoose = require("mongoose") 
 module.exports = async (client) => {
   // ———————————————[Commands]———————————————
   const commandFiles = await globPromise(`${process.cwd()}/commands/**/*.js`);
@@ -20,7 +21,7 @@ module.exports = async (client) => {
   });
 
   // ———————————————[Events]———————————————
-  const eventFiles = await globPromise(`${process.cwd()}/events/*.js`);
+  const eventFiles = await globPromise(`${process.cwd()}/events/*/*.js`);
   eventFiles.map((value) => require(value));
 
   // ———————————————[Slash Commands]———————————————
@@ -71,26 +72,36 @@ module.exports = async (client) => {
           chalk.yellow.italic("Discord Server: dsc.gg/botsway")
       );
     } else {
-      await client.guilds.cache
-        .get(mainjson.TestingServerID)
-        .commands.set(arrayOfSlashCommands);
+       
 
-      // Register for all the guilds the bot is in
-      // await client.application.commands.set(arrayOfSlashCommands);
+       await client.application.commands.set(arrayOfSlashCommands);
     }
   });
+
+    //mongoose
+if (!mongooseConnectionString) return;
+
+    mongoose
+    .connect(mongooseConnectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      
+      
+    })
+      .then(
+      console.log(
+        chalk.bgGreenBright.black(
+          `connected to Mongo DB `
+        )
+      )
+    )
+    .catch((err) =>
+      console.log(
+        chalk.bgRedBright.black(
+          `could not connect to mongo DB `
+        )
+      )
+    );
+  
 };
 
-/*
- * ———————————————[Credits]———————————————
- * Made by : DrakeZee#5223
- * Support Server : dsc.gg/BotsWay
- * Youtube : youtube.com/DrakeZee
- * Please Help Me Reach 1k Subs DJs Codes And More Amazing * Stuff!
- * Also Add Me Friend When Using This, I Have No Friends :(
- *
- * This Was Only Possible By Following People :
- *
- * recon#8448  | youtube.com/reconlxx | discord.gg/recon
- * Tomato#6966 | milrato.dev         | discord.gg/milrato
- */
